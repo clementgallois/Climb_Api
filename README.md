@@ -1,27 +1,4 @@
 # Climb_Api
-## Configure amazon S3
-### Prepare the S3 server
-add this to your bucket policy permission to allow people the object uploaded to be public
-
-```json
-{
-    "Version": "2008-10-17",
-    "Statement": [
-        {
-            "Sid": "AllowPublicRead",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "*"
-            },
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::bucketclimb/*"
-        }
-    ]
-}
-```
-### Prepare an amazon user
-create IAM to aws with write/read access to object for the S3 server server
-create access keys for your user
 
 ## Configure the server
 ### Configure the credentials on the machine for the IAM user:
@@ -53,3 +30,27 @@ pm2 start server.js --name "api"
 
 #to restart
 #pm2 restart api
+
+## Configure amazon S3 (if not done already)
+### Prepare the S3 server
+add this to your bucket policy permission to allow people the object uploaded to be public
+
+```json
+{
+    "Version": "2008-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicRead",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "*"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::bucketclimb/*"
+        }
+    ]
+}
+```
+### Prepare an amazon user
+create IAM to aws with write/read access to object for the S3 server server
+create access keys for your user
