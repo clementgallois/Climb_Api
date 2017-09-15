@@ -5,7 +5,7 @@
     "password" : "admin",
     "firstName" : "Climb",
     "lastName" : "Admin",
-    "pictureUrl" : "http://localhost:8080/images/profile_picture.png",
+    "pictureUrl" : "hhttp://www.iconarchive.com/download/i62069/designcontest/ecommerce-business/admin.ico",
     "gender" : "male",
     "bio" : "Admin account of Climb"
     
@@ -17,7 +17,7 @@
     "password" : "test",
     "firstName" : "Jane",
     "lastName" : "Doe",
-    "pictureUrl" : "http://localhost:8080/images/jane_doe.jpeg",
+    "pictureUrl" : "https://s-media-cache-ak0.pinimg.com/originals/0a/5a/fb/0a5afb6265bcb7fbe39da36d822e26f1.jpg",
     "gender" : "female",
     "bio" : "Hip Hop Dancer from Paris ✌️"
     
