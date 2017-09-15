@@ -13,11 +13,11 @@
 
   {
 
-    "title": "I'm Better Dance Missy Eliott | Freestyle",
-    "description" : "Another hip hop freestyle this time to Missy Eliott's new Hit ! #hiphop",
+    "title": "Angry dogo",
+    "description" : "lel",
     "category": "Dance",
-    "url": "http://localhost:8080/videos/imbetter.mp4",
-    "thumbnailUrl": "http://localhost:8080/images/video_thumbnail_2.png",
+    "url": "https://img-9gag-fun.9cache.com/photo/ad9ON2N_460sv.mp4",
+    "thumbnailUrl": "",
     "createdAt" : "2017-04-10",
     "updatedAt": "2017-04-10"
 
@@ -25,11 +25,11 @@
 
   {
 
-    "title": "WORK Rihanna Choreography",
-    "description" : "Trio choreography with my friends 💃",
+    "title": "Me when the water is cold",
+    "description" : "also, me when something touch my feet in the water",
     "category": "Dance",
-    "url": "http://localhost:8080/videos/work.mp4",
-    "thumbnailUrl": "http://localhost:8080/images/video_thumbnail_3.png",
+    "url": "https://img-9gag-fun.9cache.com/photo/aADEr6R_460sv.mp4",
+    "thumbnailUrl": "",
     "createdAt" : "2017-03-30",
     "updatedAt": "2017-03-30"
 
@@ -37,11 +37,11 @@
 
   {
 
-    "title": "Popping Session in the streets",
-    "description" : "Today my friend went outside to shoot a freestyle video ! Enjoy ✌️",
+    "title": "OMG",
+    "description" : "omg omg omg",
     "category": "Dance",
-    "url": "http://localhost:8080/videos/popping.mp4",
-    "thumbnailUrl": "http://localhost:8080/images/video_thumbnail_4.png",
+    "url": "https://img-9gag-fun.9cache.com/photo/aY4OLd0_460sv.mp4",
+    "thumbnailUrl": "",
     "createdAt" : "2017-03-15",
     "updatedAt": "2017-03-15"
 
@@ -49,11 +49,11 @@
 
   {
 
-    "title": "First Dance Video :D",
-    "description" : "Hey guys ! This is my first dance video, I hope you'll enjoy it ☺️",
+    "title": "I don't know how to feel about this",
+    "description" : "seriously tho",
     "category": "Dance",
-    "url": "http://localhost:8080/videos/first.mp4",
-    "thumbnailUrl": "http://localhost:8080/images/video_thumbnail_5.png",
+    "url": "hhttps://img-9gag-fun.9cache.com/photo/av7enVd_460sv.mp4",
+    "thumbnailUrl": "",
     "createdAt" : "2017-03-08",
     "updatedAt": "2017-03-08"
 
