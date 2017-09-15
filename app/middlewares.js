@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
-1;2802;0cconst config = require('../config/config.js');
+const config = require('../config/config.js');
 
 // route middleware to make sure the user is logged
 const isLoggedIn = (req, res, next) => {
