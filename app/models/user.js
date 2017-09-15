@@ -44,7 +44,7 @@ userSchema.methods.safeUser = (user) => {
       username : user.profile.username,
       firstName : user.profile.firstName,
       lastName : user.profile.lastName,
-      pictureUrl : user.profile.pictureUrl,
+      pictureUrl : user.profile.pictureUrl || "../../public/images/imagedefault.png",
       gender : user.profile.gender,
       bio : user.profile.bio,
       verified : user.profile.verified
