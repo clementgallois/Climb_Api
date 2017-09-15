@@ -71,7 +71,7 @@ var s3 = new aws.S3()
 var upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'testclemclimb',
+    bucket: 'bucketclimb',
 
     //if its a video upload also a thumbnail
     /*shouldTransform: function (req, file, cb) {
