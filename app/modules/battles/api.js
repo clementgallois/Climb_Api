@@ -25,8 +25,7 @@ const battleApiRoutes = (app) => {
   app.get('/api/battle/:battleId', isTokenValid, (req, res) => {
     const battleId = req.params.battleId || '';
 
-    Battle.find({'video_1.author' : req.params.battleId})
-    //Battle.findOne({_id: battleId}).populate('video_1').populate('video_2') //cf models/battles.js for populate
+    Battle.findOne({_id: battleId})
     .then((battle) => {
       if (!battle) {
         throw 'Battle does not exist';
