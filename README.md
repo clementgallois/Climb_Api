@@ -46,7 +46,7 @@ add this to your bucket policy permission to allow people the object uploaded to
                 "AWS": "*"
             },
             "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::bucketclimb/*"
+            "Resource": "arn:aws:s3:::namebucket/*"
         }
     ]
 }
