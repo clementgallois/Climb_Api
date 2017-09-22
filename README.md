@@ -16,6 +16,11 @@ aws_secret_access_key = // put your IAM user access key here
 #install node
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
+
+#give the right to use the port 80 to the current user
+sudo apt-get install libcap2-bin
+sudo setcap cap_net_bind_service=+ep path/to/http-server
+
 #install pm2
 sudo npm install -g pm2
 #install mongodb and launch
