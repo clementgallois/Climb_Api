@@ -21,8 +21,8 @@ sudo npm install -g pm2
 #install mongodb and launch
 sudo apt-get install mongodb
 ```
-### Launche server
-git clone
+### Launch server
+```git clone [depot]
 #start mongod as a service if it's not already
 sudo service mongod start
 #launch the server
@@ -30,7 +30,7 @@ pm2 start server.js --name "api"
 
 #to restart
 #pm2 restart api
-
+```
 ## Configure amazon S3 (if not done already)
 ### Prepare the S3 server
 add this to your bucket policy permission to allow people the object uploaded to be public
