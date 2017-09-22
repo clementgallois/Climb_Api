@@ -1,1 +1,7 @@
-{"api" : {"secret" : "putsecrethere","prehook" : "git pull && npm install","posthook" : "echo Api successfully deployed","service": "github","cwd": "/home/ubuntu/Climb_Api"}, "webapp" : {"secret" : "putsecrethere","prehook" : "git pull","posthook" : "echo webapp successfully deployed","service": "github","nopm2":true, "cwd": "/home/ubuntu/Climb_Webapp"}} 
+#install pm2-githook
+pm2 install pm2-githook
+
+#configure for api and webapp replace secret by your secrert
+
+
+pm2 set pm2-githook:apps "{"api" : {"secret" : "putsecrethere","prehook" : "git pull && npm install","posthook" : "echo Api successfully deployed","service": "github","cwd": "/home/ubuntu/Climb_Api"}, "webapp" : {"secret" : "putsecrethere","prehook" : "git pull","posthook" : "echo webapp successfully deployed","service": "github","nopm2":true, "cwd": "/home/ubuntu/Climb_Webapp"}}"
