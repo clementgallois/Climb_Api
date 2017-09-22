@@ -1,0 +1,1 @@
+{"api" : {"secret" : "putsecrethere","prehook" : "git pull && npm install","posthook" : "echo Api successfully deployed","service": "github","cwd": "/home/ubuntu/Climb_Api"}, "webapp" : {"secret" : "putsecrethere","prehook" : "git pull","posthook" : "echo webapp successfully deployed","service": "github","nopm2":true, "cwd": "/home/ubuntu/Climb_Webapp"}} 
