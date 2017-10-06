@@ -98,6 +98,11 @@ const profileApiRoutes = (app) => {
     }, (err, results) => {
       if (err) return res.json({success : false, message : 'Videos not found'});
 
+      if (!results.videos){
+        return res.json({success:true, videos: results.videos, username: "TEMP NAME, BUG TO FIX", userProfilePicture: "https://openbay-shop.s3.amazonaws.com/shop/image/data/bug-fixing-900x900.jpg"})
+      }
+      console.log(results);
+      console.log("_____________________________________________________________________________");
       res.json({success : true,
                 videos : results.videos,
                 username : results.videos[0].ownerId.profile.username,

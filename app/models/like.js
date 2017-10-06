@@ -5,8 +5,14 @@ var mongoose = require('mongoose');
 // define the schema for our user model
 var likeSchema = mongoose.Schema({
 
-  userId : String,
-  videoId: String,
+  userId : {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+      },
+  videoId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Video'
+      },
   createdAt : Date
 
 });
