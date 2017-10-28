@@ -44,8 +44,8 @@ module.exports = function(userInfos, isApi, callback) {
 
         newUser.local.email = userInfos.email;
   			newUser.profile.username = userInfos.username;
-  			newUser.profile.firstName = firstName;
-  			newUser.profile.lastName = lastName;
+  			newUser.profile.firstName = userInfos.firstName;
+  			newUser.profile.lastName = userInfos.lastName;
   			newUser.profile.bio = '';
   			newUser.profile.pictureUrl = userInfos.pictureUrl;
   			newUser.profile.gender = '';

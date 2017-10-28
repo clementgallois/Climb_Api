@@ -105,8 +105,8 @@ const profileApiRoutes = (app) => {
       console.log("_____________________________________________________________________________");
       res.json({success : true,
                 videos : results.videos,
-                username : results.videos[0].ownerId.profile.username,
-                userProfilePicture : results.videos[0].ownerId.pictureUrl
+                username : results.user.username,
+                userProfilePicture : results.user.pictureUrl
                });
     });
 
@@ -208,7 +208,7 @@ const profileApiRoutes = (app) => {
       });
     });
   });
-  
+
   app.get('/api/profile', isTokenValid, (req, res) => {
     const username = req.query.username || '';
     var profileUser;
