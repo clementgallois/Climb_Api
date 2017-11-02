@@ -4,6 +4,7 @@ const config = require('../../../config/config.js');
 const User = require('../../models/user.js');
 const signup = require('./signup.js');
 const googleSignup = require('./googleSignup.js')
+const facebookSignup = require('./facebookSignup.js')
 
 const isTokenValid = require('../../middlewares.js').isTokenValid;
 
