@@ -57,8 +57,8 @@ app.get('/api/battles/feed', isTokenValid, (req, res) => {
         let usersId = followers;
         usersId.push(mongoose.Types.ObjectId(req.user.id));
         feedBattlesUsers.push({profile: {username : req.user.username, pictureUrl : req.user.pictureUrl}, _id: req.user.id});
-        Battle.find({ $or : [ 
-                        {'video_1.author' : { $in : usersId}}, 
+        Battle.find({ $or : [
+                        {'video_1.author' : { $in : usersId}},
                         {'video_2.author' : { $in : usersId}}]
                          }).limit(20).sort('-createdAt').exec((err, battles) => {
           if (err) {
@@ -82,8 +82,8 @@ app.get('/api/battles/feed', isTokenValid, (req, res) => {
             Vote.findOne({userId: req.user.id, battleId: battle._id}).exec((err, vote) => {
               if (err) return callback(err);
               if (vote){
-                userBattle.video_1.isVoted = vote.video == 1 ? true : false;  
-                userBattle.video_2.isVoted = vote.video == 2 ? true : false;  
+                userBattle.video_1.isVoted = vote.video == 1 ? true : false;
+                userBattle.video_2.isVoted = vote.video == 2 ? true : false;
               }
               else{
                 userBattle.video_1.isVoted = false;
@@ -127,6 +127,7 @@ app.get('/api/battles/feed', isTokenValid, (req, res) => {
             newBattle.video_2.video = req.body.video_2;
             newBattle.video_2.votes = 0;
             newBattle.video_2.author = author_2;
+            newBattle.creator_id = author_2;
             newBattle.createdAt = new Date();
             newBattle.save((err, data) => {
             if (err) throw err;
@@ -134,7 +135,6 @@ app.get('/api/battles/feed', isTokenValid, (req, res) => {
             });
           });
         });
-        
     }
   });
 

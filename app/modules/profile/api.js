@@ -3,9 +3,11 @@ const async = require('async');
 const User = require('../../models/user.js');
 const Follower = require('../../models/follower.js');
 const Video = require('../../models/video.js');
+const Battle = require ('../../models/battle.js');
 const Like = require('../../models/like.js');
 const extend = require('util')._extend;
 
+var mongoose = require('mongoose');
 
 ObjectID = require('mongodb').ObjectID;
 
@@ -101,8 +103,6 @@ const profileApiRoutes = (app) => {
       if (!results.videos){
         return res.json({success:true, videos: results.videos, username: "TEMP NAME, BUG TO FIX", userProfilePicture: "https://openbay-shop.s3.amazonaws.com/shop/image/data/bug-fixing-900x900.jpg"})
       }
-      console.log(results);
-      console.log("_____________________________________________________________________________");
       res.json({success : true,
                 videos : results.videos,
                 username : results.user.username,
@@ -111,6 +111,26 @@ const profileApiRoutes = (app) => {
     });
 
   });
+
+  app.get('/api/profile/:username/battles', isTokenValid, (req, res) => {
+
+    const username = req.params.username || null;
+
+    User.findOne({'profile.username': username}).then((user) => {
+      if (!user) {
+        throw 'User does not exist';
+      } else return user;
+    }).then((user) => {
+      Battle.find({'creator_id': mongoose.Types.ObjectId(req.user.id)}).exec((err, battles) => {
+        if (err) console.log(err);
+        res.json({
+          success : true,
+          battles,
+        });
+      });
+    });
+  });
+
 
   app.post('/api/profile/follow/:username', isTokenValid, (req, res) => {
 

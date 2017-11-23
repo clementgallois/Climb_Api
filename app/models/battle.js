@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 // define the schema for our user model
 var battleSchema = mongoose.Schema({
 
+  creator_id: mongoose.Schema.Types.ObjectId,
   category : String,
   video_1 : {
   		video : {
