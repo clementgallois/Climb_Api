@@ -81,6 +81,16 @@ const videosApiRoutes = (app) => {
 
   });
 
+  app.get('/api/video/:videoId', isTokenValid, (req, res) => {
+    const videoId = req.params.videoId || '';
+
+    Video.findOne({_id: videoId}).then((video) => {
+      if (!video) {
+        throw 'Video does not exist';
+      } else return res.json({success : true, video});;
+    });
+  });
+
   app.post('/api/videos/:videoId/like', isTokenValid, (req, res) => {
     const videoId = req.params.videoId || '';
 
