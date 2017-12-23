@@ -29,7 +29,7 @@ const videosApiRoutes = (app) => {
   });
 
   app.get('/api/videos/feed', isTokenValid, (req, res) => {
-
+    console.log(req.user.id);
     async.waterfall([
       (cb) => {
         Follower.find({followerId : req.user.id}).select('userId').exec((err, followers) => {
@@ -50,6 +50,7 @@ const videosApiRoutes = (app) => {
         feedVideosUsers.push({profile: {username : req.user.username, pictureUrl : req.user.pictureUrl}, _id: req.user.id});
         Video.find({ownerId : { $in : usersId}}).limit(20).sort('-createdAt').exec((err, videos) => {
             if (err) return cb(err);
+            console.log(videos);
             cb(null, videos);
           });
       },

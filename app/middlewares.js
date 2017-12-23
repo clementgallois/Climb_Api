@@ -14,10 +14,10 @@ const isLoggedIn = (req, res, next) => {
 
 // route middleware to make sure the token is valid
 const isTokenValid = (req, res, next) => {
+	console.log('body', req.body);
   console.log("coucou");
   // check header or url parameters or post parameters for token
   let token = req.body.token || req.query.token || req.headers['x-access-token'];
-
   // decode token
   if (token) {
 
