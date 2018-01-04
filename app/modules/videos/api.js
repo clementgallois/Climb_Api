@@ -29,29 +29,26 @@ const videosApiRoutes = (app) => {
   });
 
   app.get('/api/videos/feed', isTokenValid, (req, res) => {
-    console.log('req user id', req.user.id);
     async.waterfall([
       (cb) => {
         Follower.find({followerId : req.user.id}).select('userId').exec((err, followers) => {
           if (err) return cb(err);
-          console.log('followers', followers);
           cb(null, followers);
         });
       },
       (followers, cb) => {
-        User.find({_id : { $in : followers}}).select('profile.pictureUrl profile.username _id').exec((err, users) => {
+        User.find({_id : { $in : followers[0].userId}}).select('profile.pictureUrl profile.username _id').exec((err, users) => {
           if (err) return cb(err);
           cb(null, users, followers);
         });
       },
       (users, followers, cb) => {
         let feedVideosUsers = users;
-        let usersId = followers;
+        let usersId = [followers[0].userId];
         usersId.push(req.user.id);
         feedVideosUsers.push({profile: {username : req.user.username, pictureUrl : req.user.pictureUrl}, _id: req.user.id});
         Video.find({ownerId : { $in : usersId}}).limit(20).sort('-createdAt').exec((err, videos) => {
             if (err) return cb(err);
-            console.log('videos', videos);
             cb(null, videos);
           });
       },
@@ -89,7 +86,19 @@ const videosApiRoutes = (app) => {
     Video.findOne({_id: videoId}).then((video) => {
       if (!video) {
         throw 'Video does not exist';
-      } else return res.json({success : true, video});;
+      } else {
+        Like.find({videoId: video._id}).exec((err, likes) => {
+          if (err) return res.sendStatus(500);
+          var userVideo = video.toObject();
+          userVideo.likes = likes.length;
+          Like.findOne({userId: req.user.id, videoId: video._id}).exec((err, like) => {
+            if (err) return callback(err);
+            userVideo.isLiked = like ? true : false;
+            return res.json({success : true, video: userVideo});
+          });
+
+        });
+      } //return res.json({success : true, video});
     });
   });
 
