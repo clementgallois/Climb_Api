@@ -34,6 +34,7 @@
     "passport-local": "~0.1.6",
     "passport-twitter": "~1.0.2",
     "request": "^2.81.0",
+    "socketio": "^1.0.0",
     "validator": "6.2.1"
   },
   "devDependencies": {

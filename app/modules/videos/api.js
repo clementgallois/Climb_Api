@@ -4,11 +4,14 @@ const User = require('../../models/user.js');
 const Video = require('../../models/video.js');
 const Follower = require('../../models/follower.js');
 const Like = require('../../models/like.js');
+const Comment = require('../../models/comment.js');
 
 
 const isTokenValid = require('../../middlewares.js').isTokenValid;
 const upload = require('../../middlewares.js').upload.single('video');
 
+
+var mongoose = require('mongoose');
 //ffmpeg for thumbnails
 //var ffmpeg = require('fluent-ffmpeg');
 
@@ -84,24 +87,70 @@ const videosApiRoutes = (app) => {
 
   app.get('/api/video/:videoId', isTokenValid, (req, res) => {
     const videoId = req.params.videoId || '';
+    Video.aggregate([
+        {"$match": {"_id": mongoose.Types.ObjectId(req.params.videoId)} },
+          { "$lookup": {
+            "from": "users",
+            "localField": "ownerId",
+            "foreignField": "_id",
+            "as": "owner"
+         }},
+         {$unwind:"$owner"},
+         { "$lookup": {
+              "from": "comments",
+              "localField": "_id",
+              "foreignField": "videoId",
+              "as": "comment"
+         }},
+         {$unwind:"$comment"},
+         { "$lookup": {
+              "from": "users",
+              "localField": "comment.userId",
+              "foreignField": "_id",
+              "as": "comment.user"
+         }},
+         {$unwind:"$comment.user"},
+         { "$group": {
+            "_id": "$_id",
+            "url":{$first:"$url"},
+            "description":{$first:"$description"},
+            "title":{$first:"$title"},
+            "owner":{$first:"$owner"},
+            "comments":
+              {$push:{
+                "comment":"$comment"
+              }}
+            // "title":"$title",
+            }
+          },
+          { "$project": {
+               "_id": true,
+               "url" : "$url",
+               "description" : "$description",
+               "title" : "$title",
+               "ownerId.username": "$owner.profile.username",
+               "ownerId._id": "$owner._id",
+               "ownerId.pictureUrl": "$owner.profile.pictureUrl",
+               "comments.comment.text":1,
+               "comments.comment.createdAt":1,
+               "comments.comment.user.profile.username":1,
+               "comments.comment.user.profile.pictureUrl":1,
+               "comments.comment.user._id":1,
+               "comments.comment.createdAt":1,
+           }},
 
-    Video.findOne({_id: videoId}).then((video) => {
-      if (!video) {
-        throw 'Video does not exist';
-      } else {
-        Like.find({videoId: video._id}).exec((err, likes) => {
-          if (err) return res.sendStatus(500);
-          var userVideo = video.toObject();
-          userVideo.likes = likes.length;
-          Like.findOne({userId: req.user.id, videoId: video._id}).exec((err, like) => {
-            if (err) return callback(err);
-            userVideo.isLiked = like ? true : false;
-            return res.json({success : true, video: userVideo});
-          });
+    ],
+    function(err,results) {
+        if (err) return res.json({success: false, message: err});
+        return res.json({success : true, video : results[0]});
+      }
+    );
 
-        });
-      } //return res.json({success : true, video});
-    });
+    // Video.findOne({_id: videoId}).then((video) => {
+    //   if (!video) {
+    //     throw 'Video does not exist';
+    //   } else return res.json({success : true, video});;
+    // });
   });
 
   app.post('/api/videos/:videoId/like', isTokenValid, (req, res) => {
@@ -127,6 +176,66 @@ const videosApiRoutes = (app) => {
     }).catch((err) => {
       res.json({success: false, message: err});
     });
+  });
+
+// Comments
+  app.post('/api/videos/:videoId/comment', isTokenValid, (req, res) => {
+    const videoId = req.params.videoId || '';
+
+    Video.findOne({_id: videoId}).then((video) => {
+      if (!video) {
+        throw 'Video does not exist';
+      } else return video;
+    }).then((video) => {
+        console.log(req)
+        console.log(req.user)
+        console.log(req.content)
+        if (req.user.id && req.body.commentText){
+          let newComment = new Comment();
+          newComment.userId = req.user.id;
+          newComment.videoId = videoId;
+          newComment.text = req.body.commentText;
+          newComment.createdAt = new Date();
+          return newComment.save();
+        }
+        else
+          throw 'invalid request'
+
+    }).then((model) => {
+        res.json({success: true, message: 'Successfully commented'});
+    }).catch((err) => {
+      res.json({success: false, message: err});
+    });
+  });
+
+  app.get('/api/videos/:videoId/comment', isTokenValid, (req, res) => {
+    const videoId = req.params.videoId || '';
+
+    Comment.aggregate([
+        {"$match": {"videoId": {"$eq": mongoose.Types.ObjectId(req.params.videoId)} } },
+         { "$lookup": {
+              "from": "users",
+              "localField": "userId",
+              "foreignField": "_id",
+              "as": "user"
+         }},
+         { "$unwind": { "path" : "$user" } },
+          { "$project": {
+               "_id": false,
+               "count": true,
+               "userId" : "$user._id",
+               "username" : "$user.profile.username",
+               "pictureUrl": "$user.profile.pictureUrl",
+               "commentText": "$text"
+
+           }},
+
+    ],
+    function(err,results) {
+        if (err) return res.json({success: false, message: err});
+        return res.json({success : true, comments : results});
+      }
+    );
   });
 
   app.post('/api/videos/upload', isTokenValid, (req, res) => {

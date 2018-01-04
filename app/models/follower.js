@@ -5,8 +5,14 @@ var mongoose = require('mongoose');
 // define the schema for our user model
 var followerSchema = mongoose.Schema({
 
-  userId : String,
-  followerId: String,
+  userId : {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+      },
+  followerId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+      },
   createdAt : Date
 
 });

@@ -31,6 +31,7 @@ const rankingApiRoutes = (app) => {
           { "$project": {
                "_id": false,
                "count": true,
+               "userId" : "$user._id",
                "username" : "$user.profile.username",
                "pictureUrl": "$user.profile.pictureUrl"
 
