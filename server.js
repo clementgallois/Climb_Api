@@ -15,7 +15,9 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const config = require('./config/config.js');
 
-//import { PassportLocal } from './config/passport';
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 
 // configuration
 mongoose.connect(config.database.url); // connect to our database
@@ -27,7 +29,6 @@ db.once("open", (callback) => {
   console.log("Connection succeeded.");
 });
 
-//PassportLocal(passport);
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -69,8 +70,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('secret', config.secret);
 
 // routes
-require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
-require('./app/api.js')(app); // api routes
+//require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+require('./app/api.js')(app, io); // api routes
 
 // Populate Database
 require('./test/create_sample_data.js')((err, data) => {

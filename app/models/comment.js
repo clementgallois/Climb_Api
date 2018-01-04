@@ -4,13 +4,16 @@ var mongoose = require('mongoose');
 
 // define the schema for our user model
 var commentSchema = mongoose.Schema({
-
-  userId : String,
-  videoId : String,
+  userId : {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+      },
+  videoId: {
+        	type: mongoose.Schema.Types.ObjectId,
+        	ref: 'Video'
+    	},
   text : String,
-  createdAt : Date,
-  updatedAt : Date
-
+  createdAt : Date
 });
 
 // create the model for users and expose it to our app

@@ -37,6 +37,7 @@ userSchema.methods.generateHash = function(password) {
 
 userSchema.methods.safeUser = (user) => {
   return {
+    _id: user._id,
     local : {
       email : user.local.email
     },

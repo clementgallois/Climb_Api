@@ -5,8 +5,14 @@ var mongoose = require('mongoose');
 // define the schema for our user model
 var voteSchema = mongoose.Schema({
 
-  userId : String,
-  battleId: String,
+  userId : {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User'
+      },
+  battleId: {
+        	type: mongoose.Schema.Types.ObjectId,
+        	ref: 'Video'
+    	},
   video: Number,
   createdAt : Date
 
