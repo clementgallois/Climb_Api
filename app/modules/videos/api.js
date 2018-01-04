@@ -37,15 +37,17 @@ const videosApiRoutes = (app) => {
         });
       },
       (followers, cb) => {
-        User.find({_id : { $in : followers[0].userId}}).select('profile.pictureUrl profile.username _id').exec((err, users) => {
+        const tab = followers.map(e => e.userId);
+        User.find({_id : { $in : followers.length > 0 ? tab : followers}}).select('profile.pictureUrl profile.username _id').exec((err, users) => {
           if (err) return cb(err);
-          cb(null, users, followers);
+          cb(null, users, tab, followers);
         });
       },
-      (users, followers, cb) => {
+      (users, tab, followers, cb) => {
         let feedVideosUsers = users;
-        let usersId = [followers[0].userId];
+        let usersId = followers.length > 0 ? tab : followers;
         usersId.push(req.user.id);
+        console.log(usersId);
         feedVideosUsers.push({profile: {username : req.user.username, pictureUrl : req.user.pictureUrl}, _id: req.user.id});
         Video.find({ownerId : { $in : usersId}}).limit(20).sort('-createdAt').exec((err, videos) => {
             if (err) return cb(err);
