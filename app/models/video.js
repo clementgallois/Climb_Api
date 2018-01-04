@@ -26,7 +26,8 @@ var autoPopulate = function(next) {
 
 videoSchema.
   pre('findOne', autoPopulate).
-  pre('find', autoPopulate);
+  pre('find', autoPopulate).
+  pre('aggregate', autoPopulate);
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('Video', videoSchema);

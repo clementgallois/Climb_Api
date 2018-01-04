@@ -87,70 +87,18 @@ const videosApiRoutes = (app) => {
 
   app.get('/api/video/:videoId', isTokenValid, (req, res) => {
     const videoId = req.params.videoId || '';
-    Video.aggregate([
-        {"$match": {"_id": mongoose.Types.ObjectId(req.params.videoId)} },
-          { "$lookup": {
-            "from": "users",
-            "localField": "ownerId",
-            "foreignField": "_id",
-            "as": "owner"
-         }},
-         {$unwind:"$owner"},
-         { "$lookup": {
-              "from": "comments",
-              "localField": "_id",
-              "foreignField": "videoId",
-              "as": "comment"
-         }},
-         {$unwind:"$comment"},
-         { "$lookup": {
-              "from": "users",
-              "localField": "comment.userId",
-              "foreignField": "_id",
-              "as": "comment.user"
-         }},
-         {$unwind:"$comment.user"},
-         { "$group": {
-            "_id": "$_id",
-            "url":{$first:"$url"},
-            "description":{$first:"$description"},
-            "title":{$first:"$title"},
-            "owner":{$first:"$owner"},
-            "comments":
-              {$push:{
-                "comment":"$comment"
-              }}
-            // "title":"$title",
-            }
-          },
-          { "$project": {
-               "_id": true,
-               "url" : "$url",
-               "description" : "$description",
-               "title" : "$title",
-               "ownerId.username": "$owner.profile.username",
-               "ownerId._id": "$owner._id",
-               "ownerId.pictureUrl": "$owner.profile.pictureUrl",
-               "comments.comment.text":1,
-               "comments.comment.createdAt":1,
-               "comments.comment.user.profile.username":1,
-               "comments.comment.user.profile.pictureUrl":1,
-               "comments.comment.user._id":1,
-               "comments.comment.createdAt":1,
-           }},
 
-    ],
-    function(err,results) {
-        if (err) return res.json({success: false, message: err});
-        return res.json({success : true, video : results[0]});
-      }
-    );
-
-    // Video.findOne({_id: videoId}).then((video) => {
-    //   if (!video) {
-    //     throw 'Video does not exist';
-    //   } else return res.json({success : true, video});;
-    // });
+    Video.findOne({ "_id": req.params.videoId }).then((video) => {
+      if (!video) {
+        throw 'video does not exist';
+      } else return video;
+    }).then((video) => {
+      Comment.find({videoId: video._id}).exec((err, comments) => {
+        res.json({success: true, comments: comments, video:video});
+      });
+    }).catch((err) => {
+      res.json({success: false, message: err});
+    });
   });
 
   app.post('/api/videos/:videoId/like', isTokenValid, (req, res) => {
