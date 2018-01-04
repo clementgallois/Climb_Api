@@ -32,21 +32,6 @@ const videosApiRoutes = (app) => {
   });
 
   app.get('/api/videos/feed', isTokenValid, (req, res) => {
-
-    // Video.aggregate([
-    //     { "$lookup": {
-    //          "from": "Follower",
-    //          "localField": "ownerId",
-    //          "foreignField": "followerId",
-    //          "as": "follower"
-    //     }}
-
-    // ],
-    // function(err,results) {
-    //     if (err) return res.json({success: false, message: err});
-    //     return res.json({success : true, followers : results});
-    //   }
-    // );  });
     async.waterfall([
       (cb) => {
         Follower.find({followerId : req.user.id}).select('userId').exec((err, followers) => {
@@ -55,14 +40,14 @@ const videosApiRoutes = (app) => {
         });
       },
       (followers, cb) => {
-        User.find({_id : { $in : followers}}).select('profile.pictureUrl profile.username _id').exec((err, users) => {
+        User.find({_id : { $in : followers[0].userId}}).select('profile.pictureUrl profile.username _id').exec((err, users) => {
           if (err) return cb(err);
           cb(null, users, followers);
         });
       },
       (users, followers, cb) => {
         let feedVideosUsers = users;
-        let usersId = followers;
+        let usersId = [followers[0].userId];
         usersId.push(req.user.id);
         feedVideosUsers.push({profile: {username : req.user.username, pictureUrl : req.user.pictureUrl}, _id: req.user.id});
         Video.find({ownerId : { $in : usersId}}).limit(20).sort('-createdAt').exec((err, videos) => {
@@ -100,7 +85,6 @@ const videosApiRoutes = (app) => {
 
   app.get('/api/video/:videoId', isTokenValid, (req, res) => {
     const videoId = req.params.videoId || '';
-
     Video.aggregate([
         {"$match": {"_id": mongoose.Types.ObjectId(req.params.videoId)} },
           { "$lookup": {

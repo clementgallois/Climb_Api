@@ -67,7 +67,6 @@ const profileApiRoutes = (app) => {
 
     const username = req.params.username || null;
     let profileUser = null;
-
     async.series({
       user : (cb) => {
         User.findOne({'profile.username' : username}).select('profile.username profile.pictureUrl _id').exec((err, user) => {
@@ -121,7 +120,7 @@ const profileApiRoutes = (app) => {
         throw 'User does not exist';
       } else return user;
     }).then((user) => {
-      Battle.find({'creator_id': mongoose.Types.ObjectId(req.user.id)}).exec((err, battles) => {
+      Battle.find({'creator_id': mongoose.Types.ObjectId(user._id)}).exec((err, battles) => {
         if (err) console.log(err);
         res.json({
           success : true,
@@ -135,7 +134,6 @@ const profileApiRoutes = (app) => {
   app.post('/api/profile/follow/:username', isTokenValid, (req, res) => {
 
     const username = req.params.username || null;
-
     User.findOne({'profile.username': username}).then((user) => {
       if (!user) {
         throw 'User does not exist';
@@ -169,11 +167,11 @@ const profileApiRoutes = (app) => {
           throw 'User does not exist';
         } else return user;
       }).then((user) => {
-        Follower.findOne({followerId: req.user.id, userId: user._id}).exec((err, Follower) => {
+        Follower.findOne({followerId: req.user.id, userId: user._id}).exec((err, follower) => {
           if (follower) {
             return follower.remove();
           }
-          throw 'User is not followed';
+          return res.json({ success: false, message: 'User is not followed' });
         });
       }).then((model) => {
           res.json({success: true, message: 'Successfully unfollowed'});
@@ -191,8 +189,6 @@ const profileApiRoutes = (app) => {
         return res.json({success: false, message: req.fileValidationError});
       }
       if(err) {
-        console.log('Error Occured While uploading');
-        console.log(err);
         return;
       }
       if (req.file == undefined)
