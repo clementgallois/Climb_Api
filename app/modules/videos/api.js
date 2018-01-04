@@ -94,7 +94,17 @@ const videosApiRoutes = (app) => {
       } else return video;
     }).then((video) => {
       Comment.find({videoId: video._id}).exec((err, comments) => {
-        res.json({success: true, comments: comments, video:video});
+        Like.find({videoId: video._id}).exec((err, likes) => {
+          if (err) return;
+          var userVideo = video.toObject();
+          userVideo.likes = likes.length;
+          Like.findOne({userId: req.user.id, videoId: video._id}).exec((err, like) => {
+            if (err) return callback(err);
+            userVideo.isLiked = like ? true : false;
+            res.json({success: true, comments: comments, video:userVideo});
+          });
+
+        });
       });
     }).catch((err) => {
       res.json({success: false, message: err});
