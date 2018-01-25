@@ -56,7 +56,7 @@ const authApiRoutes = (app) => {
 			let userInfos = {
 				username : req.body.name || '',
 				email: req.body.email || '',
-				pictureUrl: req.body.pictureUrl
+				pictureUrl: req.body.pictureUrl || "imagedefault.png",
 			};
 
 			User.findOne( { $or: [ {'local.email' : userInfos.email }, {'profile.username' : userInfos.username } ] }, function(err, user) {
