@@ -42,7 +42,6 @@ app.get('/api/chat/:convId', isTokenValid, (req, res) => {
 
 /* SAVE CHAT */
 app.post('/api/chat/', isTokenValid, (req, res) => {
-  console.log('tu es entré')
   Conversation.findOne({"$or":[{participant1: req.body.sendTo, participant2: req.user.id}, {participant1: req.user.id, participant2: req.body.sendTo}]}).then((conv) => {
         if (!conv) {
           let newConv = new Conversation();
